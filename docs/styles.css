@@ -1,0 +1,36 @@
+body {
+    width: 100%;
+    max-width: 50rem;
+    margin: auto;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+main,
+header,
+footer {
+    margin: 1rem;
+}
+
+main {
+    border-top: black solid 1px;
+    border-bottom: black solid 1px;
+}
+
+#result {
+    border: grey solid 1px;
+    border-radius: 0.5rem;
+    background-color: #f8f8f8;
+    padding: 0.5rem;
+    font-family: monospace;
+}
+
+.parameters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: fit-content;
+}
+
+label {
+    text-align: right;
+    margin-right: 1rem;
+}
