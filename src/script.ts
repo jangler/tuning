@@ -42,6 +42,7 @@ function regenerateScale() {
     resultParagraph.innerText = buildScl(description, scaleNotes(step1, step2));
 }
 
+descriptionInput.addEventListener('change', regenerateScale);
 step1Input.addEventListener('change', regenerateScale);
 step2Input.addEventListener('change', regenerateScale);
 
