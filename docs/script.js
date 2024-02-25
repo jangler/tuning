@@ -23,6 +23,7 @@ function buildScl(description, notes) {
     lines.push(`! ${description}.scl`);
     lines.push('!');
     lines.push(description);
+    lines.push(vectors.length.toString());
     lines.push('!');
     lines.push(...notes.map(x => x.toFixed(5)));
     lines.push('');
