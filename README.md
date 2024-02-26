@@ -2,4 +2,4 @@
 
 Generate microtonal isomorphic layouts for the
 [Exquis](https://dualo.com/en/exquis/) using
-[Scala](https://www.huygens-fokker.org/scala/).
+[Scala scales](https://www.huygens-fokker.org/scala/scl_format.html).
