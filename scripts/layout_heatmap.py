@@ -11,7 +11,7 @@ Computation will take a few minutes.
 """
 
 from argparse import ArgumentParser
-import json
+import shelve
 from fractions import Fraction
 from itertools import chain
 from math import log, log2
@@ -62,6 +62,7 @@ vectors = list(chain(
 ))
 
 cache = {}
+cache_path = 'scripts/layout_heatmap'
 
 def closest(x: float, xs: list[float]) -> float:
     return min(xs, key=lambda y: abs(x - y))
@@ -79,20 +80,21 @@ def write_figure(matrix: list[list[float]]):
     matrix = [[round(x, 1) for x in row] for row in matrix]
     fig = px.imshow(matrix,
                     title='LCJI approximation by Exquis 39-key note layouts',
-                    labels={'x': 'Up-left step', 'y': 'Up-right step', 'color': 'Score'},
+                    labels={'x': 'Up-right step', 'y': 'Up-left step', 'color': 'Score'},
                     x=step_range,
                     y=step_range)
     fig.write_html('src/layout-heatmaps/exquis39.html', include_plotlyjs='cdn')
-    with open('src/layout-heatmaps/exquis39.json', 'w') as f:
-        json.dump(matrix, f)
+    with shelve.open(cache_path) as db:
+        db['exquis39'] = matrix
 
 def main():
     if args.cached:
-        with open('src/layout-heatmaps/exquis39.json') as f:
-            matrix = json.load(f)
+        with shelve.open(cache_path) as db:
+            matrix = db['exquis39']
     else:
         with Pool(4) as p:
-            matrix = [p.map(layout_score, [(upright, upleft) for upright in step_range])
+            matrix = [p.map(layout_score, [(upleft, upright)
+                                           for upright in step_range])
                       for upleft in tqdm(step_range)]
 
     write_figure(matrix)
