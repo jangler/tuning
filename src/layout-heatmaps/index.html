@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="These interactive plots show the best step size pairs (measured in cents) for approximating LCJI on a MIDI controller.">
+    <title>Isomorphic note layout heatmaps</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Isomorphic note layout heatmaps</h1>
+    </header>
+
+    <main>
+        <p>
+            These interactive plots show the best step size pairs (measured in
+            cents) for approximating LCJI on a MIDI controller.
+        </p>
+        <p>
+            Specifically, a layout's score is the sum of inverse Tenney heights
+            of 16-integer-limit intervals scaled according to each interval's
+            best approximation on the keyboard if the center key is 1/1. The
+            penalty operates on the square of the error, with 20¢ or more
+            counting as a complete miss.
+        </p>
+        <ul>
+            <li><a href="exquis39">Exquis 39-key</a></li>
+        </ul>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href=".">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>

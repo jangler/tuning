@@ -12,8 +12,16 @@ footer {
 }
 
 main {
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
     border-bottom: lightgray solid 1px;
+}
+
+h2 {
+    font-weight: normal;
+}
+
+img {
+    display: block;
 }
 
 #result {
@@ -41,5 +49,19 @@ footer>ul {
     >li {
         display: inline;
         margin-right: 0.5rem;
+    }
+}
+
+li {
+    line-height: 1.5;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    th, td {
+        padding: 0.5rem;
+        border: 1px solid lightgray;
     }
 }
