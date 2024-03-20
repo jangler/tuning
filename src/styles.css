@@ -12,8 +12,8 @@ footer {
 }
 
 main {
-    border-top: black solid 1px;
-    border-bottom: black solid 1px;
+    padding-bottom: 0.5rem;
+    border-bottom: lightgray solid 1px;
 }
 
 #result {
@@ -33,4 +33,13 @@ main {
 label {
     text-align: right;
     margin-right: 1rem;
+}
+
+footer>ul {
+    padding-left: 0;
+
+    >li {
+        display: inline;
+        margin-right: 0.5rem;
+    }
 }

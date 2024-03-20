@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <meta name="description" content="Generate Scala scales for the Exquis">
-    <title>Exquis .scl generator</title>
+    <meta name="description" content="Microtonal web utilities">
+    <title>Tuning</title>
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
@@ -14,30 +14,17 @@
 <body>
 
     <header>
-        <h1>Exquis .scl generator</h1>
+        <h1>Microtonal web utilities</h1>
     </header>
 
     <main>
-        <p>
-            This webpage generates isomorphic microtonal layouts for the
-            <a href="https://dualo.com/en/exquis/">Exquis</a> using
-            <a href="https://www.huygens-fokker.org/scala/scl_format.html">Scala scales</a>.
-            Since the Exquis does not currently support remapping pads,
-            the outermost "columns" of pads are duplicate notes.
-        </p>
-        <div class="parameters">
-            <label for="description">Scale description:</label>
-            <input type="text" id="description" value="Exquis scale">
-            <label for="step1">Up-right step (cents):</label>
-            <input type="number" id="step1" value="400">
-            <label for="step2">Right step (cents):</label>
-            <input type="number" id="step2" value="100">
-        </div>
-        <p id="result"></p>
+        <ul>
+            <li><a href="exquis-scl-generator.html">Exquis .scl generator</a></li>
+        </ul>
     </main>
 
     <footer>
-        <a href="https://github.com/jangler/exquis-scl-generator">GitHub</a>
+        <a href="https://github.com/jangler/tuning">GitHub</a>
     </footer>
 
 </body>
