@@ -19,7 +19,7 @@ from multiprocessing import Pool
 from typing import Iterable
 
 parser = ArgumentParser(description=DESCRIPTION)
-parser.add_argument('--error-limit', type=float, default=20)
+parser.add_argument('--error-limit', type=float, default=15)
 parser.add_argument('--integer-limit', type=int, default=16)
 parser.add_argument('--cached', action='store_true')
 args = parser.parse_args()
