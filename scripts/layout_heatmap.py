@@ -7,7 +7,7 @@ center pad as 1/1. Point values for each interval are scaled based on
 the square of the absolute error of the best approximation, down to 0
 at the error limit.
 
-Computation may take a few minutes.
+Computation takes a few minutes, especially for larger controllers.
 """
 
 from argparse import ArgumentParser
@@ -18,7 +18,7 @@ from itertools import chain
 from math import log, log2
 from typing import Callable, Iterable
 
-# A vector is stored as a tuple[int, int].
+# A step vector is stored as a tuple[int, int].
 # The first step is the y-axis step; the second is the x-axis.
 
 def exquis_vectors_from_rowfunc(row: Callable) -> list[tuple[int, int]]:
@@ -38,11 +38,19 @@ def exquis39_vectors() -> list[tuple[int, int]]:
         return ((g1 - i, g2 + i) for i in range(length))
     return exquis_vectors_from_rowfunc(row)
 
+def rectangular_vectors(w: int, h: int) -> list[tuple[int, int]]:
+    return list((y - h//2, x - w//2)
+                for x in range(w)
+                for y in range(h))
+
 def launchpad_vectors() -> list[tuple[int, int]]:
-    # Assume the Launchpad is 9x9 so that there's a center pad.
-    return list((y - 4, x - 4)
-                for x in range(9)
-                for y in range(9))
+    return rectangular_vectors(8, 8)
+
+def linnstrument_vectors() -> list[tuple[int, int]]:
+    return rectangular_vectors(25, 8)
+
+def linnstrument128_vectors() -> list[tuple[int, int]]:
+    return rectangular_vectors(16, 8)
 
 @dataclass
 class Controller:
@@ -55,6 +63,8 @@ controllers = {
     'exquis': Controller('Exquis', 'Up-right', 'Up-left', exquis_vectors),
     'exquis39': Controller('Exquis 39-key', 'Up-right', 'Up-left', exquis39_vectors),
     'launchpad': Controller('Launchpad', 'Right', 'Up', launchpad_vectors),
+    'linnstrument': Controller('LinnStrument', 'Right', 'Up', linnstrument_vectors),
+    'linnstrument128': Controller('LinnStrument 128', 'Right', 'Up', linnstrument128_vectors),
 }
 
 parser = ArgumentParser(description=DESCRIPTION)
@@ -81,19 +91,15 @@ def tenney_height(r: Fraction) -> float:
 step_range = list(range(args.error_limit, 702 + args.error_limit))
 error_limit_squared = args.error_limit ** 2
 
-# Since we're measuring from the center of the keyboard, intervals are
-# symmetric with their inverses. So we can ignore all intervals < 1,
-# and then just double the score to get the same result. We also ignore
-# 1/1 since its inverse Tenney height is undefined.
+# Discard 1/1 since its inverse Tenney height is undefined.
 rs = [r for r in integer_limit_intervals(args.integer_limit)
-      if r > 1]
+      if r != Fraction(1)]
 
 interval_cents = {r: cents(r) for r in rs}
 
 def point_value(interval: Fraction, cents: float, best_approximation: float) -> float:
     error = abs(best_approximation - cents)
-    # Divide 2 instead of 1 here to make up for ignoring intervals < 1.
-    return 2 / tenney_height(interval) * max(0, 1 - error*error / error_limit_squared)
+    return 1 / tenney_height(interval) * max(0, 1 - error*error / error_limit_squared)
 
 cache = {}
 cache_path = 'scripts/layout_heatmap'
