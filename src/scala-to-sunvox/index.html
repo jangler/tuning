@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Convert Scala scales and keyboard maps to SunVox pitch curves">
+  <title>Scala to SunVox</title>
+  <link rel="stylesheet" href="/normalize.css">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>Scala to SunVox</h1>
+  </header>
+
+  <main>
+
+    <section>
+      <p>
+        This webpage converts
+        <a href="https://www.huygens-fokker.org/scala/">Scala</a> scales and
+        keyboard maps to <a href="https://warmplace.ru/soft/sunvox/">SunVox</a>
+        pitch curves.
+      </p>
+    </section>
+
+    <section>
+      <label for="sclInput">Select .scl:</label>
+      <input type="file" id="sclInput" accept=".scl">
+    </section>
+
+    <section>
+      <label for="kbmInput">Select .kbm (optional):</label>
+      <input type="file" id="kbmInput" accept=".kbm">
+    </section>
+
+    <section>
+      <label for="centsInput">Cents offset:</label>
+      <input type="number" id="centsInput" value="0">
+    </section>
+
+    <section>
+      <button id="convertButton">Convert to .curve16bit</button>
+      <p id="messageArea"></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <ul>
+      <li><a href="/">Index</a></li>
+      <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+    </ul>
+  </footer>
+
+</body>
+
+</html>

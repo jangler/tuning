@@ -65,3 +65,12 @@ table {
         border: 1px solid lightgray;
     }
 }
+
+section {
+    margin: 1rem 0;
+}
+
+/* Not sure why this text looks bigger than everything else at medium! */
+input[type="file"] {
+    font-size: small;
+}
