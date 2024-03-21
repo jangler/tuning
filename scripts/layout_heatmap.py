@@ -18,27 +18,22 @@ from itertools import chain
 from math import log, log2
 from typing import Callable, Iterable
 
+def exquis_vectors_from_rowfunc(row: Callable) -> list[tuple[int, int]]:
+    return list(chain(row(4, 1), row(3, 1), row(3, 0), row(2, 0), row(2, -1),
+                      row(1, -1), row(1, -2), row(0, -2), row(0, -3),
+                      row(-1, -3), row(-1, -4)))
+
 def exquis_vectors() -> list[tuple[int, int]]:
     def row(g1: int, g2: int) -> Iterable[tuple[int, int]]:
         length = 5 if (g1 + g2) % 2 == 0 else 6
         return ((g1 + 1 - i, g2 - 1 + i) for i in range(length))
-    
-    return list(chain(
-        row(4, 1), row(3, 1), row(3, 0), row(2, 0), row(2, -1),
-        row(1, -1),
-        row(1, -2), row(0, -2), row(0, -3), row(-1, -3), row(-1, -4)
-    ))
+    return exquis_vectors_from_rowfunc(row)
 
 def exquis39_vectors() -> list[tuple[int, int]]:
     def row(g1: int, g2: int) -> Iterable[tuple[int, int]]:
         length = 3 if (g1 + g2) % 2 == 0 else 4
         return ((g1 - i, g2 + i) for i in range(length))
-    
-    return list(chain(
-        row(4, 1), row(3, 1), row(3, 0), row(2, 0), row(2, -1),
-        row(1, -1),
-        row(1, -2), row(0, -2), row(0, -3), row(-1, -3), row(-1, -4)
-    ))
+    return exquis_vectors_from_rowfunc(row)
 
 @dataclass
 class Controller:
