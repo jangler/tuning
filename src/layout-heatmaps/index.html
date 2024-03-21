@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <meta name="description" content="Interactive plots showing best step size pairs for approximating LCJI on a MIDI controller">
+    <meta name="description" content="Interactive plots showing best step size pairs for approximating LCJI on various MIDI controllers">
     <title>Isomorphic note layout heatmaps</title>
     <link rel="stylesheet" href="../normalize.css">
     <link rel="stylesheet" href="../styles.css">
@@ -19,7 +19,7 @@
     <main>
         <p>
             These interactive plots show the best step size pairs (measured in
-            cents) for approximating LCJI on a MIDI controller.
+            cents) for approximating LCJI on various MIDI controllers.
         </p>
         <p>
             Specifically, a layout's score is the sum of inverse Tenney heights
@@ -31,11 +31,18 @@
         <ul>
             <li><a href="exquis">Exquis</a></li>
             <li><a href="exquis39">Exquis 39-key</a></li>
+            <li><a href="launchpad">Launchpad</a></li>
         </ul>
         <p>
-            There are two Exquis options because only a 39-note subset of the
-            Exquis pads can be remapped until support for full-keyboard
-            remapping is implemented.
+            There are two <strong>Exquis</strong> options because only a
+            39-note subset of the Exquis pads can be remapped until support for
+            full-keyboard remapping is implemented.
+        </p>
+        <p>
+            A 9×9 <strong>Launchpad</strong> layout is assumed rather than 8×8,
+            since this allows a symmetric center. This is possible by making
+            the Launchpad's buttons function as an additional row and column of
+            notes.
         </p>
     </main>
 

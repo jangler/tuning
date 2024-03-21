@@ -18,6 +18,9 @@ from itertools import chain
 from math import log, log2
 from typing import Callable, Iterable
 
+# A vector is stored as a tuple[int, int].
+# The first step is the y-axis step; the second is the x-axis.
+
 def exquis_vectors_from_rowfunc(row: Callable) -> list[tuple[int, int]]:
     return list(chain(row(4, 1), row(3, 1), row(3, 0), row(2, 0), row(2, -1),
                       row(1, -1), row(1, -2), row(0, -2), row(0, -3),
@@ -35,6 +38,12 @@ def exquis39_vectors() -> list[tuple[int, int]]:
         return ((g1 - i, g2 + i) for i in range(length))
     return exquis_vectors_from_rowfunc(row)
 
+def launchpad_vectors() -> list[tuple[int, int]]:
+    # Assume the Launchpad is 9x9 so that there's a center pad.
+    return list((y - 4, x - 4)
+                for x in range(9)
+                for y in range(9))
+
 @dataclass
 class Controller:
     name: str
@@ -45,6 +54,7 @@ class Controller:
 controllers = {
     'exquis': Controller('Exquis', 'Up-right', 'Up-left', exquis_vectors),
     'exquis39': Controller('Exquis 39-key', 'Up-right', 'Up-left', exquis39_vectors),
+    'launchpad': Controller('Launchpad', 'Right', 'Up', launchpad_vectors),
 }
 
 parser = ArgumentParser(description=DESCRIPTION)
