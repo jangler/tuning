@@ -1,6 +1,6 @@
 // front-end
 
-import { parseScl } from './scl.js';
+import { parseScl } from '../lib/scl.js';
 import { parseKbm, defaultMap } from './kbm.js';
 import { generateCurve } from './curve.js';
 

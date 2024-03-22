@@ -36,11 +36,11 @@ img {
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: fit-content;
-}
 
-label {
-    text-align: right;
-    margin-right: 1rem;
+    label {
+        text-align: right;
+        margin-right: 1rem;
+    }
 }
 
 footer>ul {
@@ -60,7 +60,8 @@ table {
     border-collapse: collapse;
     table-layout: fixed;
 
-    th, td {
+    th,
+    td {
         padding: 0.5rem;
         border: 1px solid lightgray;
     }
@@ -73,4 +74,21 @@ section {
 /* Not sure why this text looks bigger than everything else at medium! */
 input[type="file"] {
     font-size: small;
+}
+
+.flex-row {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.field {
+    margin-right: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#alert {
+    color: red;
 }

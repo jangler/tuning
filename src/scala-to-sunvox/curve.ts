@@ -2,7 +2,7 @@
 
 export { generateCurve };
 
-import { Scale } from "./scl.js";
+import { Scale } from "../lib/scl.js";
 import { Keymap } from "./kbm.js";
 
 const TOTAL_KEYS = 128;

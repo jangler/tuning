@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Find EDO approximations of rational or irrational intervals">
+    <title>EDO approximation of intervals</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>EDO approximation of intervals</h1>
+    </header>
+
+    <main>
+        <section class="flex-row">
+            <div class="field">
+                <label for="intervals">Intervals:</label>
+                <input type="text" id="intervals">
+            </div>
+            <div class="field">
+                <label for="edo-limit">EDO limit:</label>
+                <input type="number" id="edo-limit" size="5" value="99">
+            </div>
+            <div class="field">
+                <label for="sorted-by">Sorted by:</label>
+                <select id="sorted-by">
+                    <option value="1">Mean error (¢)</option>
+                    <option value="2" selected>Error/step</option>
+                </select>
+            </div>
+        </section>
+        <p id="alert"></p>
+        <p>
+            Intervals can be specified as ratios (ex. 5/4) or as cents values (ex. 386.0).
+        </p>
+        <table class="hidden">
+            <thead>
+                <tr>
+                    <th>EDO</th>
+                    <th>Mean error (¢)</th>
+                    <th>Error/step</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
