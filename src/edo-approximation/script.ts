@@ -1,3 +1,4 @@
+// @ts-ignore
 import { html, render } from 'https://unpkg.com/htm/preact/standalone.module.js';
 import { parseInterval } from '../lib/scl.js';
 
