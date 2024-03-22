@@ -1,3 +1,5 @@
+import { parseInterval } from "../lib/scl.js";
+
 // The first number is steps NE; the second is steps E. This is for an Exquis
 // in standard tuning, meaning that the two outermost "columns" of pads are
 // duplicate notes. The SW corner of the non-duplicate area is unison.
@@ -38,8 +40,11 @@ const step2Input = document.querySelector('#step2') as HTMLInputElement;
 
 function regenerateScale() {
     const description = descriptionInput.value;
-    const step1 = step1Input.valueAsNumber;
-    const step2 = step2Input.valueAsNumber;
+
+    // Convert steps from (up-left, up-right) to (up-right, right).
+    const step1 = parseInterval(step2Input.value);
+    const step2 = parseInterval(step2Input.value) - parseInterval(step1Input.value);
+
     resultParagraph.innerText = buildScl(description, scaleNotes(step1, step2));
 }
 

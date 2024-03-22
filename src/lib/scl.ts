@@ -9,7 +9,7 @@ function centsFromRatio(num: number, den: number): number {
     return 1200 * Math.log(num / den) / Math.log(2);
 }
 
-/** Try to parse s as a ratio or cents value.
+/** Try to parse s as a ratio, cents value, or octave fraction.
  *  Throw an exception if the input could not be parsed. */
 export function parseInterval(s: string): number {
     s = s.trim();
@@ -21,6 +21,9 @@ export function parseInterval(s: string): number {
         return centsFromRatio(tokens[0], tokens[1]);
     } else if (/^(\d+\.\d*|\.\d+)$/.test(s)) {
         return parseFloat(s);
+    } else if (/^\d+\\\d+$/.test(s)) {
+        const tokens = s.split('\\').map((x) => parseInt(x));
+        return 1200 / tokens[1] * tokens[0];
     }
     throw new Error(`Could not parse pitch value: ${s}`)
 }

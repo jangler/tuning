@@ -8,7 +8,7 @@
     <title>Exquis .scl generator</title>
     <link rel="stylesheet" href="../normalize.css">
     <link rel="stylesheet" href="../styles.css">
-    <script src="script.js" defer></script>
+    <script src="script.js" type="module" defer></script>
 </head>
 
 <body>
@@ -25,13 +25,17 @@
             Since the Exquis does not currently support remapping pads,
             the outermost "columns" of pads are duplicate notes.
         </p>
+        <p>
+            Intervals can be specified as ratios (ex. 5/4),
+            cents values (ex. 386.0), or octave fractions (ex. 10\31).
+        </p>
         <div class="parameters">
             <label for="description">Scale description:</label>
             <input type="text" id="description" value="Exquis scale">
-            <label for="step1">Up-right step (cents):</label>
-            <input type="number" id="step1" value="400">
-            <label for="step2">Right step (cents):</label>
-            <input type="number" id="step2" value="100">
+            <label for="step1">Up-left step:</label>
+            <input type="text" id="step1" value="300.0">
+            <label for="step2">Up-right step:</label>
+            <input type="text" id="step2" value="400.0">
         </div>
         <p id="result"></p>
     </main>
