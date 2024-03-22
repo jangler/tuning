@@ -33,7 +33,7 @@ function edoError(edo: number, c: number): number {
 function getResults(intervals: number[]): number[][] {
     const compareIndex = parseInt(sortedByInput.value);
     return range(5, edoLimitInput.valueAsNumber + 1).map(edo => {
-        const error = mean(intervals.map(c => edoError(edo, c)))
+        const error = mean(intervals.map(c => Math.abs(edoError(edo, c))));
         return [edo, error, error / (1200 / edo)];
     }).sort((a, b) => Math.abs(a[compareIndex]) - Math.abs(b[compareIndex]))
         .slice(0, maxResults);
