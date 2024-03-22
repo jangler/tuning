@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Preview isomorphic microtonal note layouts for MIDI controllers">
+    <title>Isomorphic note layout preview</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Isomorphic note layout preview</h1>
+    </header>
+
+    <main>
+        <p>
+            Intervals can be specified as ratios (ex. 5/4),
+            cents values (ex. 386.3), or octave fractions (ex. 10\31).
+        </p>
+        <section class="parameters">
+            <label for="step2">Up step:</label>
+            <input type="text" id="step1" value="400.0">
+            <label for="step1">Right step:</label>
+            <input type="text" id="step2" value="300.0">
+        </section>
+        <section class="flex-row">
+            <div class="field">
+                <input type="checkbox" id="showCents" checked>
+                <label for="showCents">Show cents?</label>
+            </div>
+            <div class="field">
+                <input type="checkbox" id="showUDN" checked>
+                <label for="showUDN">Show UDN for EDOs?</label>
+            </div>
+            <div class="field">
+                <input type="checkbox" id="showJI" checked>
+                <label for="showJI">Show JI approximation?</label>
+            </div>
+        </section>
+        <table class="layout"></table>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
