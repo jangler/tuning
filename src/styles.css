@@ -94,5 +94,10 @@ input[type="file"] {
 }
 
 table.layout {
-    /* TODO */
+    text-align: center;
+
+    td {
+        width: 10rem;
+        height: 5rem;
+    }
 }
