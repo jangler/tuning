@@ -5,12 +5,16 @@ import { udn } from '../lib/udn.js';
 
 const step1Input = document.querySelector('#step1') as HTMLInputElement;
 const step2Input = document.querySelector('#step2') as HTMLInputElement;
+const rowsInput = document.querySelector('#rows') as HTMLInputElement;
+const columnsInput = document.querySelector('#columns') as HTMLInputElement;
 const displayInput = document.querySelector('#display') as HTMLSelectElement;
+const integerLimitLabel = document.querySelector('#integerLimitLabel') as HTMLLabelElement;
+const integerLimitInput = document.querySelector('#integerLimit') as HTMLInputElement;
+const errorLimitLabel = document.querySelector('#errorLimitLabel') as HTMLLabelElement;
+const errorLimitInput = document.querySelector('#errorLimit') as HTMLInputElement;
 const alert = document.getElementById('alert') as HTMLParagraphElement;
 const table = document.querySelector('table') as HTMLTableElement;
 
-// TODO: Set grid dimensions.
-// TODO: Set integer limit.
 // TODO: Set 1/1 point by clicking on cell?
 // TODO: Cell colors? Could go by primes or by UDN.
 
@@ -33,23 +37,29 @@ function integerLimitIntervals(limit: number): Map<number, string> {
     return m;
 }
 
-const intervals = integerLimitIntervals(16);
-const errorLimit = 15;
+var intervals = integerLimitIntervals(integerLimitInput.valueAsNumber);
+
+function regenIntervals() {
+    intervals = integerLimitIntervals(integerLimitInput.valueAsNumber)
+}
 
 function vectors(width: number, height: number): number[][][] {
     const rows = [];
     for (var y = 0; y < height; y++) {
         const row = [];
         for (var x = 0; x < width; x++) {
-            row.push([Math.floor(height / 2) - y, x - Math.floor(width / 2)]);
+            row.push([
+                Math.floor(height / 2) - y,
+                x - Math.floor((width - 0.5) / 2),
+            ]);
         }
         rows.push(row);
     }
     return rows;
 }
 
-function rows(step1: number, step2: number): number[][] {
-    return vectors(25, 8).map(row =>
+function makeRows(step1: number, step2: number, rows: number, columns: number): number[][] {
+    return vectors(rows, columns).map(row =>
         row.map(vector => vector[0] * step1 + vector[1] * step2));
 }
 
@@ -64,6 +74,7 @@ function getEDO(): number {
 }
 
 function ji(cents: number): string[] {
+    const errorLimit = errorLimitInput.valueAsNumber;
     return [...intervals.entries()]
         .filter(([c, _]) => Math.abs(cents - c) < errorLimit)
         .map(([_, s]) => s);
@@ -78,7 +89,7 @@ function formatCell(cents: number, display: string) {
             break;
         case 'edosteps':
             if (!Number.isNaN(edo)) text = `${Math.round(cents / (1200 / edo))}\\${edo}`;
-            else throw new Error("Can't display EDO data for non-EDO steps");
+            else throw new Error("Can't display EDO data without matching EDO steps");
             break;
         case 'ji':
             text = ji(cents).slice(0, 2).join(', ');
@@ -87,7 +98,7 @@ function formatCell(cents: number, display: string) {
             if (!Number.isNaN(edo))
                 text = udn(Math.round(cents / (1200 / edo)), edo).slice(0, 2).join(', ');
             else
-                throw new Error("Can't display EDO data for non-EDO steps");
+                throw new Error("Can't display EDO data without matching EDO steps");
             break;
     }
     return html`<td>${text}</td>`;
@@ -97,19 +108,32 @@ function formatRows(rows: number[][], display: string) {
     return html`${rows.map(row => html`<tr>${row.map(c => formatCell(c, display))}</tr>`)}`;
 }
 
+function setJIControlVisibility(visible: boolean) {
+    for (const e of [integerLimitLabel, integerLimitInput, errorLimitLabel, errorLimitInput]) {
+        if (visible) e.classList.remove('hidden');
+        else e.classList.add('hidden');
+    }
+}
+
 function updateTable() {
     try {
         const step1 = parseInterval(step1Input.value);
         const step2 = parseInterval(step2Input.value);
+        const rows = rowsInput.valueAsNumber;
+        const columns = columnsInput.valueAsNumber;
         const display = displayInput.value;
-        render(formatRows(rows(step1, step2), display), table);
+        setJIControlVisibility(display == 'ji');
+        render(formatRows(makeRows(step1, step2, rows, columns), display), table);
         alert.textContent = '';
     } catch (e) {
         if (e instanceof Error) alert.textContent = e.message;
     }
 }
 
-for (const input of [step1Input, step2Input, displayInput]) {
+integerLimitInput.addEventListener('change', regenIntervals);
+
+for (const input of [step1Input, step2Input, rowsInput, columnsInput,
+    displayInput, integerLimitInput, errorLimitInput]) {
     input.addEventListener('change', updateTable);
 }
 

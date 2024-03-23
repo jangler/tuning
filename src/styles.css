@@ -94,8 +94,12 @@ input[type="file"] {
 }
 
 table.layout {
+    /* center table and text */
     text-align: center;
-    width: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
 
     td {
         width: 3rem;
