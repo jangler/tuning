@@ -95,9 +95,10 @@ input[type="file"] {
 
 table.layout {
     text-align: center;
+    width: 100%;
 
     td {
-        width: 10rem;
-        height: 5rem;
+        width: 3rem;
+        height: 3rem;
     }
 }

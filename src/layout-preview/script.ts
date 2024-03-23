@@ -1,12 +1,14 @@
 // @ts-ignore
 import { html, render } from 'https://unpkg.com/htm/preact/standalone.module.js';
 import { parseInterval } from '../lib/scl.js';
+import { udn } from '../lib/udn.js';
 
 const step1Input = document.querySelector('#step1') as HTMLInputElement;
 const step2Input = document.querySelector('#step2') as HTMLInputElement;
+const displayInput = document.querySelector('#display') as HTMLSelectElement;
+const alert = document.getElementById('alert') as HTMLParagraphElement;
 const table = document.querySelector('table') as HTMLTableElement;
 
-// TODO: Toggle info on/off.
 // TODO: Set grid dimensions.
 // TODO: Set integer limit.
 // TODO: Set 1/1 point by clicking on cell?
@@ -25,7 +27,7 @@ function integerLimitIntervals(limit: number): Map<number, string> {
     for (var n = 1; n <= limit; n++) {
         for (var d = 1; d <= limit; d++) {
             const f = gcd([n, d]);
-            m.set(1200 * Math.log(n/d) / Math.log(2), `${n/f}/${d/f}`);
+            m.set(1200 * Math.log(n / d) / Math.log(2), `${n / f}/${d / f}`);
         }
     }
     return m;
@@ -47,7 +49,7 @@ function vectors(width: number, height: number): number[][][] {
 }
 
 function rows(step1: number, step2: number): number[][] {
-    return vectors(15, 15).map(row =>
+    return vectors(25, 8).map(row =>
         row.map(vector => vector[0] * step1 + vector[1] * step2));
 }
 
@@ -61,64 +63,53 @@ function getEDO(): number {
     return edos[0] == edos[1] ? edos[0] : NaN;
 }
 
-function mod(a: number, b: number): number {
-    while (a < 0) a += b;
-    return a % b;
-}
-
-// TODO: It would be nice to have octave numbers here.
-function udn(cents: number, edo: number): string {
-    // If performance becomes an issue, batch-notating an array of step or
-    // cents values could save some computation over doing them separately.
-    const steps = mod(Math.round(cents / (1200 / edo)), edo);
-    const fifth = Math.round(702 / (1200 / edo));
-    const sharp = fifth * 7 - edo * 4;
-    var symbols = new Map(['F', 'C', 'G', 'D', 'A', 'E', 'B']
-        .map((v, i) => [v, mod(fifth * (i - 1),  edo)]));
-    const matches = [];
-    while (matches.length == 0) {
-        for (const [s, n] of symbols) {
-            if (n == steps) matches.push(s);
-        }
-        symbols = new Map([...symbols.entries()].flatMap(([s, n]) => {
-            const a: [string, number][] = [];
-            if (!s.includes('♭')) a.push([s + '♯', mod(n + sharp, edo)]);
-            if (!s.includes('♯')) a.push([s + '♭', mod(n - sharp, edo)]);
-            if (!s.includes('v')) a.push(['^' + s, mod(n + 1, edo)]);
-            if (!s.includes('^')) a.push(['v' + s, mod(n - 1, edo)]);
-            return a;
-        }));
-    }
-    return matches.join(', ');
-}
-
-function ji(cents: number): string {
-    const matches = [...intervals.entries()]
+function ji(cents: number): string[] {
+    return [...intervals.entries()]
         .filter(([c, _]) => Math.abs(cents - c) < errorLimit)
         .map(([_, s]) => s);
-    return matches.length > 0 ? `(${matches.join(', ')})` : '';
 }
 
-function formatCell(cents: number) {
+function formatCell(cents: number, display: string) {
     const edo = getEDO();
-    return html`<td>
-    ${!Number.isNaN(edo) && html`<div>${udn(cents, edo)}</div>`}
-    ${html`<div>${cents.toFixed(1)}¢</div>`}
-    ${html`<div>${ji(cents)}</div>`}
-    </td>`;
+    var text = '';
+    switch (display) {
+        case 'cents':
+            text = cents.toFixed(0) + '¢';
+            break;
+        case 'edosteps':
+            if (!Number.isNaN(edo)) text = `${Math.round(cents / (1200 / edo))}\\${edo}`;
+            else throw new Error("Can't display EDO data for non-EDO steps");
+            break;
+        case 'ji':
+            text = ji(cents).slice(0, 2).join(', ');
+            break;
+        case 'udn':
+            if (!Number.isNaN(edo))
+                text = udn(Math.round(cents / (1200 / edo)), edo).slice(0, 2).join(', ');
+            else
+                throw new Error("Can't display EDO data for non-EDO steps");
+            break;
+    }
+    return html`<td>${text}</td>`;
 }
 
-function formatRows(rows: number[][]) {
-    return html`${rows.map(row => html`<tr>${row.map(formatCell)}</tr>`)}`;
+function formatRows(rows: number[][], display: string) {
+    return html`${rows.map(row => html`<tr>${row.map(c => formatCell(c, display))}</tr>`)}`;
 }
 
 function updateTable() {
-    const step1 = parseInterval(step1Input.value);
-    const step2 = parseInterval(step2Input.value);
-    render(formatRows(rows(step1, step2)), table);
+    try {
+        const step1 = parseInterval(step1Input.value);
+        const step2 = parseInterval(step2Input.value);
+        const display = displayInput.value;
+        render(formatRows(rows(step1, step2), display), table);
+        alert.textContent = '';
+    } catch (e) {
+        if (e instanceof Error) alert.textContent = e.message;
+    }
 }
 
-for (const input of [step1Input, step2Input]) {
+for (const input of [step1Input, step2Input, displayInput]) {
     input.addEventListener('change', updateTable);
 }
 
