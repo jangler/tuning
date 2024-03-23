@@ -34,12 +34,12 @@ img {
 
 .parameters {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: max-content max-content;
     width: fit-content;
 
     label {
         text-align: right;
-        margin-right: 1rem;
+        margin-right: 0.5rem;
     }
 }
 
@@ -104,5 +104,9 @@ table.layout {
     td {
         width: 3rem;
         height: 3rem;
+    }
+
+    td:hover {
+        background-color: #f8f8f8;
     }
 }

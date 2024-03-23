@@ -15,7 +15,6 @@ const errorLimitInput = document.querySelector('#errorLimit') as HTMLInputElemen
 const alert = document.getElementById('alert') as HTMLParagraphElement;
 const table = document.querySelector('table') as HTMLTableElement;
 
-// TODO: Set 1/1 point by clicking on cell?
 // TODO: Cell colors? Could go by primes or by UDN.
 
 export function gcd(xs: number[]): number {
@@ -38,6 +37,8 @@ function integerLimitIntervals(limit: number): Map<number, string> {
 }
 
 var intervals = integerLimitIntervals(integerLimitInput.valueAsNumber);
+var centerX = Math.floor((rowsInput.valueAsNumber - 0.5) / 2);
+var centerY = Math.floor(columnsInput.valueAsNumber / 2);
 
 function regenIntervals() {
     intervals = integerLimitIntervals(integerLimitInput.valueAsNumber)
@@ -48,10 +49,7 @@ function vectors(width: number, height: number): number[][][] {
     for (var y = 0; y < height; y++) {
         const row = [];
         for (var x = 0; x < width; x++) {
-            row.push([
-                Math.floor(height / 2) - y,
-                x - Math.floor((width - 0.5) / 2),
-            ]);
+            row.push([centerY - y, x - centerX]);
         }
         rows.push(row);
     }
@@ -80,7 +78,7 @@ function ji(cents: number): string[] {
         .map(([_, s]) => s);
 }
 
-function formatCell(cents: number, display: string) {
+function formatCell(x: number, y: number, cents: number, display: string) {
     const edo = getEDO();
     var text = '';
     switch (display) {
@@ -101,11 +99,11 @@ function formatCell(cents: number, display: string) {
                 throw new Error("Can't display EDO data without matching EDO steps");
             break;
     }
-    return html`<td>${text}</td>`;
+    return html`<td onClick=${() => { centerX = x; centerY = y; updateTable(); }}>${text}</td>`;
 }
 
 function formatRows(rows: number[][], display: string) {
-    return html`${rows.map(row => html`<tr>${row.map(c => formatCell(c, display))}</tr>`)}`;
+    return html`${rows.map((row, y) => html`<tr>${row.map((c, x) => formatCell(x, y, c, display))}</tr>`)}`;
 }
 
 function setJIControlVisibility(visible: boolean) {
