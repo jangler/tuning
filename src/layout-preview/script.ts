@@ -6,6 +6,12 @@ const step1Input = document.querySelector('#step1') as HTMLInputElement;
 const step2Input = document.querySelector('#step2') as HTMLInputElement;
 const table = document.querySelector('table') as HTMLTableElement;
 
+// TODO: Toggle info on/off.
+// TODO: Set grid dimensions.
+// TODO: Set integer limit.
+// TODO: Set 1/1 point by clicking on cell?
+// TODO: Cell colors? Could go by primes or by UDN.
+
 export function gcd(xs: number[]): number {
     if (xs.length == 0) throw Error('gcd of empty array is undefined');
     for (let i = xs[0]; i > 1; i--) {
@@ -62,6 +68,8 @@ function mod(a: number, b: number): number {
 
 // TODO: It would be nice to have octave numbers here.
 function udn(cents: number, edo: number): string {
+    // If performance becomes an issue, batch-notating an array of step or
+    // cents values could save some computation over doing them separately.
     const steps = mod(Math.round(cents / (1200 / edo)), edo);
     const fifth = Math.round(702 / (1200 / edo));
     const sharp = fifth * 7 - edo * 4;
@@ -72,12 +80,14 @@ function udn(cents: number, edo: number): string {
         for (const [s, n] of symbols) {
             if (n == steps) matches.push(s);
         }
-        symbols = new Map([...symbols.entries()].flatMap(([s, n]) => [
-            [s + '♯', mod(n + sharp, edo)],
-            [s + '♭', mod(n - sharp, edo)],
-            ['^' + s, mod(n + 1, edo)],
-            ['v' + s, mod(n - 1, edo)],
-        ]));
+        symbols = new Map([...symbols.entries()].flatMap(([s, n]) => {
+            const a: [string, number][] = [];
+            if (!s.includes('♭')) a.push([s + '♯', mod(n + sharp, edo)]);
+            if (!s.includes('♯')) a.push([s + '♭', mod(n - sharp, edo)]);
+            if (!s.includes('v')) a.push(['^' + s, mod(n + 1, edo)]);
+            if (!s.includes('^')) a.push(['v' + s, mod(n - 1, edo)]);
+            return a;
+        }));
     }
     return matches.join(', ');
 }
