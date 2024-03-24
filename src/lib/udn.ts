@@ -20,8 +20,10 @@ export function udn(steps: number, edo: number): string[] {
             const a: [string, number][] = [];
             if (!s.includes('♭')) a.push([s + '♯', mod(n + sharp, edo)]);
             if (!s.includes('♯')) a.push([s + '♭', mod(n - sharp, edo)]);
-            if (!s.includes('v')) a.push(['^' + s, mod(n + 1, edo)]);
-            if (!s.includes('^')) a.push(['v' + s, mod(n - 1, edo)]);
+            if (sharp != 1) {
+                if (!s.includes('v')) a.push(['^' + s, mod(n + 1, edo)]);
+                if (!s.includes('^')) a.push(['v' + s, mod(n - 1, edo)]);
+            }
             return a;
         }));
     }

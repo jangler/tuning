@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="View JI approximation and notation for steps of an EDO">
+    <title>EDO interval table</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>EDO interval table</h1>
+    </header>
+
+    <main>
+        <section class="flex-row">
+            <div class="field">
+                <label for="edo">EDO:</label>
+                <input type="number" id="edo" size="5" value="12">
+            </div>
+            <div class="field">
+                <label for="integerLimit">Integer limit:</label>
+                <input type="number" id="integerLimit" size="5" value="16">
+            </div>
+            <div class="field">
+                <label for="errorLimit">Error limit:</label>
+                <input type="number" id="errorLimit" size="5" value="15">
+            </div>
+        </section>
+        <p id="alert"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Steps</th>
+                    <th>Notation</th>
+                    <th>Approximated JI intervals</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
