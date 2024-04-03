@@ -1,4 +1,4 @@
-function gcd(xs: number[]): number {
+export function gcd(xs: number[]): number {
     if (xs.length == 0) throw Error('gcd of empty array is undefined');
     for (let i = xs[0]; i > 1; i--) {
         if (xs.every(x => x % i == 0)) return i;

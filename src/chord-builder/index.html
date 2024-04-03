@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Experiment with just or tempered chord construction">
+    <title>Chord builder</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../favicon.png">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Chord builder</h1>
+    </header>
+
+    <main>
+        <p>
+            Click intervals to move them into or out of the chord.
+        </p>
+        <section class="flex-row hidden">
+            <div class="field">
+                <label for="commas">Commas:</label>
+                <input type="text" id="commas">
+            </div>
+        </section>
+        <h2>Chord</h2>
+        <div id="chord" class="flex-row"></div>
+        <h2>Series</h2>
+        <p id="series"></p>
+        <h2>Dyads</h2>
+        <p id="dyads"></p>
+        <h2>Suggestions</h2>
+        <div id="suggestions" class="flex-row"></div>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
