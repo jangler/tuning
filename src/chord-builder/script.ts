@@ -84,8 +84,27 @@ function tenneyHeight(r: Ratio): number {
     return Math.log2(r[0] * r[1]);
 }
 
+function mean(xs: number[]): number {
+    return xs.reduce((a, b) => a + b, 0) / xs.length;
+}
+
+// Dyadic complexity, series complexity, and critical band penalty are all
+// scaled such that typical values will be in the range 0-1. Not supposed to be
+// scientific, just a helpful heuristic.
+
 function dyadicComplexity(r: Ratio, chord: Ratio[]): number {
-    return chord.map(x => tenneyHeight(dyad(r, x))).reduce((a, b) => a + b, 0);
+    return mean(chord.map(x => tenneyHeight(dyad(r, x)))) / 10;
+}
+
+function seriesComplexity(chord: Ratio[]): number {
+    return mean(series(chord)) / 64;
+}
+
+function criticalBandPenalty(r: Ratio, chord: Ratio[]): number {
+    return mean(chord.map(x => {
+        const d = dyad(r, x);
+        return Math.max(0, 8 * (9/8 - d[0]/d[1]));
+    }));
 }
 
 function renderChord() {
@@ -96,7 +115,9 @@ function renderChord() {
     const nonChordIntervals = integerLimitRatios(27)
         .filter(r => !chordIntervals.some(x => x[0] == r[0] && x[1] == r[1]));
     console.log(nonChordIntervals);
-    const complexities = new Map(nonChordIntervals.map(r => [r, dyadicComplexity(r, chordIntervals)]));
+    // TODO: Factor series height and critical band into this.
+    const complexities = new Map(nonChordIntervals.map(r =>
+        [r, dyadicComplexity(r, chordIntervals) + seriesComplexity([...chordIntervals, r]) + criticalBandPenalty(r, chordIntervals)]));
     nonChordIntervals.sort((a, b) => complexities.get(a)! - complexities.get(b)!);
     render(html`${nonChordIntervals.map(r =>
         html`<span class="ratio" onClick=${() => addInterval(r)}>${r.join('/')}</span>`)
