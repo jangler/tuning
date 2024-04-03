@@ -1,4 +1,4 @@
-function mod(a: number, b: number): number {
+export function mod(a: number, b: number): number {
     return a - Math.floor(a / b) * b;
 }
 
@@ -11,10 +11,10 @@ export function udn(steps: number, edo: number): string[] {
     const sharp = fifth * 7 - edo * 4;
     var symbols = new Map(['F', 'C', 'G', 'D', 'A', 'E', 'B']
         .map((v, i) => [v, mod(fifth * (i - 1),  edo)]));
-    const matches = [];
+    const matches: string[] = [];
     while (matches.length == 0) {
         for (const [s, n] of symbols) {
-            if (n == stepClass) matches.push(s);
+            if (n == stepClass && !matches.includes(s)) matches.push(s);
         }
         symbols = new Map([...symbols.entries()].flatMap(([s, n]) => {
             const a: [string, number][] = [];

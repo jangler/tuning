@@ -38,9 +38,13 @@ img {
     width: fit-content;
 
     label {
-        text-align: right;
         margin-right: 0.5rem;
+        text-align: right;
     }
+}
+
+label {
+    margin-right: 0.2em;
 }
 
 footer>ul {

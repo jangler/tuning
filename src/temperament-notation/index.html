@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Show diatonic notation for tempered intervals">
+    <title>Temperament notation finder</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="../favicon.png">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Temperament notation finder</h1>
+    </header>
+
+    <main>
+        <section class="parameters">
+            <label for="edos">EDOs:</label>
+            <input type="text" id="edos" size="10">
+            <label for="subgroup">Optional prime subgroup:</label>
+            <input type="text" id="subgroup" size="10">
+            <label for="integerLimit">Integer limit:</label>
+            <input type="number" id="integerLimit" size="5" value="16">
+            <label for="arrowRatio">Arrow ratio:</label>
+            <input type="text" id="arrowRatio" size="10" value="81/80">
+        </section>
+        <p id="alert"></p>
+        <table class="hidden">
+            <thead>
+                <tr>
+                    <th>Notation</th>
+                    <th>Intervals</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
