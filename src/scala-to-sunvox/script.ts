@@ -3,6 +3,7 @@
 import { parseScl } from '../lib/scl.js';
 import { parseKbm, defaultMap } from './kbm.js';
 import { generateCurve } from './curve.js';
+import { download } from '../lib/download.js';
 
 const sclInput =
     document.querySelector('#sclInput') as HTMLInputElement;
@@ -22,21 +23,6 @@ function reportError(err: Error) {
 
 function clearError() {
     messageArea.setAttribute('style', 'display: none;')
-}
-
-// https://stackoverflow.com/questions/19327749/
-function download(blob: Blob, filename: string) {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('style', 'display: none');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-    });
 }
 
 convertButton.addEventListener('click', (event) => {
