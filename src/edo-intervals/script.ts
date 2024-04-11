@@ -63,7 +63,7 @@ function downloadReaperNames() {
     const includeUDN = includeUDNInput.checked;
     const lines = ['# MIDI note/CC name map'];
     for (let note = 0; note <= 127; note++) {
-        lines.push(`${note} ${udn(note - c4_note, edo, !includeUDN).map(s => s.slice(0, s.length - 1)).join('/')}`);
+        lines.push(`${note} ${udn(note - c4_note, edo, !includeUDN).join('/')}`);
     }
     download(new Blob([lines.map(s => s + '\r\n').join('')]), `${edo}edo.txt`);
 }
