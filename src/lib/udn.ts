@@ -3,7 +3,7 @@ export function mod(a: number, b: number): number {
 }
 
 /** Return an array of the simplest UDN possibilities for a step count in an edo. */
-export function udn(steps: number, edo: number): string[] {
+export function udn(steps: number, edo: number, noArrows?: boolean): string[] {
     // If performance becomes an issue, batch-notating an array of step or
     // cents values could save some computation over doing them separately.
     const stepClass = mod(steps, edo);
@@ -12,7 +12,8 @@ export function udn(steps: number, edo: number): string[] {
     var symbols = new Map(['F', 'C', 'G', 'D', 'A', 'E', 'B']
         .map((v, i) => [v, mod(fifth * (i - 1),  edo)]));
     const matches: string[] = [];
-    while (matches.length == 0) {
+    let i = 0;
+    while (matches.length == 0 && i < 5) {
         for (const [s, n] of symbols) {
             if (n == stepClass && !matches.includes(s)) matches.push(s);
         }
@@ -20,12 +21,13 @@ export function udn(steps: number, edo: number): string[] {
             const a: [string, number][] = [];
             if (!s.includes('♭')) a.push([s + '♯', mod(n + sharp, edo)]);
             if (!s.includes('♯')) a.push([s + '♭', mod(n - sharp, edo)]);
-            if (sharp != 1) {
+            if (!noArrows && sharp != 1) {
                 if (!s.includes('v')) a.push(['^' + s, mod(n + 1, edo)]);
                 if (!s.includes('^')) a.push(['v' + s, mod(n - 1, edo)]);
             }
             return a;
         }));
+        i += 1;
     }
     function octaveOffset(symbol: string, steps: number): number {
         const accidentalSteps =

@@ -9,6 +9,7 @@ const c4_note = 60;
 const edoInput = document.querySelector('#edo') as HTMLInputElement;
 const integerLimitInput = document.querySelector('#integerLimit') as HTMLInputElement;
 const errorLimitInput = document.querySelector('#errorLimit') as HTMLInputElement;
+const includeUDNInput = document.querySelector('#includeUpsAndDowns') as HTMLInputElement;
 const alert = document.getElementById('alert') as HTMLParagraphElement;
 const tbody = document.querySelector('tbody') as HTMLTableSectionElement;
 const reaperButton = document.querySelector('#reaperButton') as HTMLButtonElement;
@@ -31,6 +32,7 @@ function updateTable() {
     try {
         const edo = edoInput.valueAsNumber;
         const errorLimit = errorLimitInput.valueAsNumber;
+        const includeUDN = includeUDNInput.checked;
         const stepSize = 1200 / edo;
     
         const rows = [];
@@ -38,11 +40,10 @@ function updateTable() {
             rows.push(html`
             <tr>
             <td>${i}</td>
-            <td>${udn(i, edo).map(s => s.slice(0, s.length - 1)).join(', ')}</td>
+            <td>${udn(i, edo, !includeUDN).map(s => s.slice(0, s.length - 1)).join(', ')}</td>
             <td>${approximatedIntervals(i * stepSize, errorLimit).join(', ')}</td>
             </tr>`);
         }
-        console.log(rows);
     
         render(html`${rows}`, tbody);
         alert.textContent = '';
@@ -51,7 +52,7 @@ function updateTable() {
     }
 }
 
-for (const input of [edoInput, integerLimitInput, errorLimitInput]) {
+for (const input of [edoInput, integerLimitInput, errorLimitInput, includeUDNInput]) {
     input.addEventListener('change', updateTable);
 }
 
@@ -59,9 +60,10 @@ updateTable();
 
 function downloadReaperNames() {
     const edo = edoInput.valueAsNumber;
+    const includeUDN = includeUDNInput.checked;
     const lines = ['# MIDI note/CC name map'];
     for (let note = 0; note <= 127; note++) {
-        lines.push(`${note} ${udn(note - c4_note, edo).map(s => s.slice(0, s.length - 1)).join('/')}`);
+        lines.push(`${note} ${udn(note - c4_note, edo, !includeUDN).map(s => s.slice(0, s.length - 1)).join('/')}`);
     }
     download(new Blob([lines.map(s => s + '\r\n').join('')]), `${edo}edo.txt`);
 }
