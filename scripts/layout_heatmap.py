@@ -68,7 +68,7 @@ controllers = {
 }
 
 parser = ArgumentParser(description=DESCRIPTION)
-parser.add_argument('--error-limit', type=float, default=15)
+parser.add_argument('--error-limit', type=float, default=15.0)
 parser.add_argument('--integer-limit', type=int, default=16)
 parser.add_argument('--cached', action='store_true')
 parser.add_argument('controller', nargs='+', choices=controllers.keys())
@@ -80,7 +80,8 @@ from tqdm.contrib.concurrent import process_map
 def integer_limit_intervals(limit: int) -> set[Fraction]:
     return set(Fraction(n, d)
                for n in range(1, limit+1)
-               for d in range(1, limit+1))
+               for d in range(1, limit+1)
+               if n/d >= 1/4 and n/d <= 4)
 
 def cents(r: Fraction) -> float:
     return 1200 * log(r) / log(2)
@@ -88,7 +89,7 @@ def cents(r: Fraction) -> float:
 def tenney_height(r: Fraction) -> float:
     return log2(r.numerator * r.denominator)
 
-step_range = list(range(args.error_limit, 702 + args.error_limit))
+step_range = list(range(int(args.error_limit), 702 + int(args.error_limit)))
 error_limit_squared = args.error_limit ** 2
 
 # Discard 1/1 since its inverse Tenney height is undefined.
