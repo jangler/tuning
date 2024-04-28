@@ -70,6 +70,8 @@ controllers = {
 parser = ArgumentParser(description=DESCRIPTION)
 parser.add_argument('--error-limit', type=float, default=15.0)
 parser.add_argument('--integer-limit', type=int, default=16)
+parser.add_argument('--subgroup', type=str, default='')
+parser.add_argument('--range', type=Fraction, default=Fraction(8, 1))
 parser.add_argument('--cached', action='store_true')
 parser.add_argument('controller', nargs='+', choices=controllers.keys())
 args = parser.parse_args()
@@ -80,8 +82,7 @@ from tqdm.contrib.concurrent import process_map
 def integer_limit_intervals(limit: int) -> set[Fraction]:
     return set(Fraction(n, d)
                for n in range(1, limit+1)
-               for d in range(1, limit+1)
-               if n/d >= 1/4 and n/d <= 4)
+               for d in range(1, limit+1))
 
 def cents(r: Fraction) -> float:
     return 1200 * log(r) / log(2)
@@ -91,10 +92,26 @@ def tenney_height(r: Fraction) -> float:
 
 step_range = list(range(int(args.error_limit), 702 + int(args.error_limit)))
 error_limit_squared = args.error_limit ** 2
+subgroup = set(map(int, args.subgroup.split('.'))) if args.subgroup else set()
+
+def factors(n: int) -> Iterable[int]:
+    for i in range(1, n + 1):
+        if n % i == 0:
+            yield i
+
+def is_prime(n: int) -> bool:
+    return len(list(factors(n))) == 2
+
+def in_subgroup(r: Fraction, subgroup: set[int]) -> bool:
+    return all(f in subgroup
+               for n in r.as_integer_ratio()
+               for f in factors(n)
+               if is_prime(f))
 
 # Discard 1/1 since its inverse Tenney height is undefined.
 rs = [r for r in integer_limit_intervals(args.integer_limit)
-      if r != Fraction(1)]
+      if r != Fraction(1) and (not subgroup or in_subgroup(r, subgroup))
+      and r <= args.range and r >= 1/args.range]
 
 interval_cents = {r: cents(r) for r in rs}
 
