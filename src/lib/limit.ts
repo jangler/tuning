@@ -28,7 +28,7 @@ export function primeFactors(n: number): number[] {
 }
 
 /** Return true if all prime factors of n and d are included in subgroup. */
-function inSubgroup(n: number, d: number, subgroup: number[]): boolean {
+export function inSubgroup(n: number, d: number, subgroup: number[]): boolean {
     if (d == 1) return primeFactors(n).every(f => subgroup.includes(f));
     return inSubgroup(n, 1, subgroup) && inSubgroup(d, 1, subgroup);
 }

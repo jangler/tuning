@@ -1,8 +1,11 @@
 // @ts-ignore
 import { html, render } from 'https://unpkg.com/htm/preact/standalone.module.js';
-import { gcd } from "../lib/limit.js";
+import { gcd, inSubgroup } from "../lib/limit.js";
 
-const commasInput = document.querySelector('#commas') as HTMLInputElement;
+const integerLimitInput = document.querySelector('#integerLimit') as HTMLInputElement;
+const subgroupInput = document.querySelector('#subgroup') as HTMLInputElement;
+const octavesBelowInput = document.querySelector('#octavesBelow') as HTMLInputElement;
+const octavesAboveInput = document.querySelector('#octavesAbove') as HTMLInputElement;
 const seriesBox = document.querySelector('#series')!;
 const dyadsBox = document.querySelector('#dyads')!;
 const chordDiv = document.querySelector('#chord')!;
@@ -10,7 +13,10 @@ const suggestionsDiv = document.querySelector('#suggestions')!;
 
 type Ratio = [number, number];
 
-let commas: Ratio[] = [];
+let integerLimit = integerLimitInput.valueAsNumber;
+let subgroup = subgroupInput.value.match(/\d+/g)?.map(s => parseInt(s)) as number[];
+let octavesBelow = octavesBelowInput.valueAsNumber;
+let octavesAbove = octavesAboveInput.valueAsNumber;
 let chordIntervals: Ratio[] = [[1, 1], [5, 4], [3, 2]];
 
 function lcm(xs: number[]): number {
@@ -32,7 +38,6 @@ function simplify(r: Ratio): Ratio {
 }
 
 function dyad(a: Ratio, b: Ratio): Ratio {
-    // TODO: Simplify using commas.
     if (a[0]/a[1] < b[0]/b[1]) {
         const c = a;
         a = b;
@@ -65,13 +70,13 @@ function removeInterval(r: Ratio) {
     updateDiagnostics();
 }
 
-function integerLimitRatios(limit: number): Ratio[] {
+function ratios(limit: number, subgroup: number[]): Ratio[] {
     const s = new Set<number>();
     const a = new Array<Ratio>();
     for (let n = 1; n <= limit; n++) {
-        for (let d = Math.ceil(n / 4); d < n; d++) {
+        for (let d = Math.ceil(n / 2**octavesAbove); d < n * 2**octavesBelow; d++) {
             const k = n/d;
-            if (!s.has(k)) {
+            if (!s.has(k) && (subgroup === undefined || inSubgroup(n, d, subgroup))) {
                 s.add(k);
                 a.push(simplify([n, d]));
             }
@@ -112,7 +117,7 @@ function renderChord() {
         html`<span class="ratio" onClick=${() => removeInterval(r)}>${r.join('/')}</span>`)
     }`,
     chordDiv);
-    const nonChordIntervals = integerLimitRatios(27)
+    const nonChordIntervals = ratios(integerLimit, subgroup)
         .filter(r => !chordIntervals.some(x => x[0] == r[0] && x[1] == r[1]));
     console.log(nonChordIntervals);
     // TODO: Factor series height and critical band into this.
@@ -132,15 +137,25 @@ function updateDiagnostics() {
         .map(r => r.join('/')).join(', ');
 }
 
-function updateCommas() {
-    const matches = commasInput.value.match(/\d+[/:]\d+/g);
-    if (matches) {
-        commas = matches.map(s => s.match(/\d+/g)!.map(s => parseInt(s)) as Ratio);
-        updateDiagnostics();
-    }
-}
-
 renderChord();
 updateDiagnostics();
-commasInput.addEventListener('input', updateCommas);
-updateCommas();
+
+integerLimitInput.addEventListener('change', () => {
+    integerLimit = integerLimitInput.valueAsNumber;
+    renderChord();
+});
+
+subgroupInput.addEventListener('change', () => {
+    subgroup = subgroupInput.value.match(/\d+/g)?.map(s => parseInt(s)) as number[];
+    renderChord();
+});
+
+octavesBelowInput.addEventListener('change', () => {
+    octavesBelow = octavesBelowInput.valueAsNumber;
+    renderChord();
+});
+
+octavesAboveInput.addEventListener('change', () => {
+    octavesAbove = octavesAboveInput.valueAsNumber;
+    renderChord();
+});
