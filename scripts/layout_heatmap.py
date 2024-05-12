@@ -73,6 +73,7 @@ parser.add_argument('--integer-limit', type=int, default=16)
 parser.add_argument('--subgroup', type=str, default='')
 parser.add_argument('--range', type=Fraction, default=Fraction(8, 1))
 parser.add_argument('--cached', action='store_true')
+parser.add_argument('--edo', type=int, default=0)
 parser.add_argument('controller', nargs='+', choices=controllers.keys())
 args = parser.parse_args()
 
@@ -90,7 +91,10 @@ def cents(r: Fraction) -> float:
 def tenney_height(r: Fraction) -> float:
     return log2(r.numerator * r.denominator)
 
-step_range = list(range(int(args.error_limit), 702 + int(args.error_limit)))
+if args.edo:
+    step_range = [i * 1200 / args.edo for i in range(1, args.edo)]
+else:
+    step_range = list(range(int(args.error_limit), 702 + int(args.error_limit)))
 error_limit_squared = args.error_limit ** 2
 subgroup = set(map(int, args.subgroup.split('.'))) if args.subgroup else set()
 
