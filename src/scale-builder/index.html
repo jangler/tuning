@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Interactive scale builder for equal temperaments">
+    <title>Scale builder</title>
+    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../favicon.png">
+    <script src="script.js" type="module" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Scale builder</h1>
+    </header>
+
+    <main>
+        <p>
+            <label for="edo">Steps per octave:</label>
+            <input type="number" id="edo" value="12" size="4">
+        </p>
+        <p>
+            <button id="prevMode">Previous mode</button>
+            <button id="nextMode">Next mode</button>
+        </p>
+        <p>
+            Click intervals to move them into or out of the scale.
+        </p>
+        <h2>Scale</h2>
+        <div id="scale" class="flex-row"></div>
+        <h2>Non-scale tones</h2>
+        <div id="suggestions" class="flex-row"></div>
+    </main>
+
+    <footer>
+        <ul>
+            <li><a href="..">Index</a></li>
+            <li><a href="https://github.com/jangler/tuning">GitHub</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>

@@ -119,7 +119,6 @@ function renderChord() {
     chordDiv);
     const nonChordIntervals = ratios(integerLimit, subgroup)
         .filter(r => !chordIntervals.some(x => x[0] == r[0] && x[1] == r[1]));
-    console.log(nonChordIntervals);
     // TODO: Factor series height and critical band into this.
     const complexities = new Map(nonChordIntervals.map(r =>
         [r, dyadicComplexity(r, chordIntervals) + seriesComplexity([...chordIntervals, r]) + criticalBandPenalty(r, chordIntervals)]));

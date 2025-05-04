@@ -1,0 +1,17 @@
+.note {
+    border: 1px solid gray;
+    border-radius: 0.1rem;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    background-color: white;
+    width: 3rem;
+}
+
+.note:hover {
+    background-color: #f0f0f0;
+}
+
+.approx {
+    color: gray;
+    font-size: small;
+}
