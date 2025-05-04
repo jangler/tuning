@@ -117,7 +117,8 @@ function formatRatio(r: Ratio | null): string {
 function renderScale() {
     render(html`${scaleIntervals.map(n => html`
         <button class="note" onClick=${() => removeInterval(n)}
-            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}>
+            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}
+            style="background-color: hsl(${360*n/edo} 80 97);">
             ${n - relative}
             <div class="approx">
                 ${formatRatio(detemper(Math.abs(n - relative)))}
@@ -134,7 +135,8 @@ function renderNonScale() {
         complexity(a, scaleIntervals) - complexity(b, scaleIntervals));
     render(html`${nonChordIntervals.map(n => html`
         <button class="note" onClick=${() => addInterval(n)}
-            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}>
+            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}
+            style="background-color: hsl(${360*n/edo} 80 97);">
             ${n}
             <div class="approx">${formatRatio(detemper(n))}</div>
         </button>`)
