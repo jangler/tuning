@@ -77,6 +77,7 @@ function addInterval(n: number) {
     scaleIntervals.push(n);
     scaleIntervals.sort((a, b) => a - b);
     renderScale();
+    renderNonScale();
     updateDiagnostics();
 }
 
@@ -84,6 +85,7 @@ function removeInterval(n: number) {
     if (n == 0) return;
     scaleIntervals = scaleIntervals.filter(x => x != n);
     renderScale();
+    renderNonScale();
     updateDiagnostics();
 }
 
@@ -104,20 +106,34 @@ function formatRatio(r: Ratio | null): string {
     }
 }
 
+let relative = 0;
+
+function viewRelative(n: number) {
+    relative = n;
+    renderScale();
+}
+
 function renderScale() {
     render(html`${scaleIntervals.map(n => html`
-        <button class="note" onClick=${() => removeInterval(n)}>
-            ${n}
-            <div class="approx">${formatRatio(detemper(n))}</div>
+        <button class="note" onClick=${() => removeInterval(n)}
+            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}>
+            ${n - relative}
+            <div class="approx">
+                ${formatRatio(detemper(Math.abs(n - relative)))}
+            </div>
         </button>`)
     }`,
     scaleDiv);
+}
+
+function renderNonScale() {
     const nonChordIntervals = [...Array(edo).keys()]
         .filter(x => !scaleIntervals.includes(x));
     nonChordIntervals.sort((a, b) =>
         complexity(a, scaleIntervals) - complexity(b, scaleIntervals));
     render(html`${nonChordIntervals.map(n => html`
-        <button class="note" onClick=${() => addInterval(n)}>
+        <button class="note" onClick=${() => addInterval(n)}
+            onmouseenter=${() => viewRelative(n)} onmouseleave=${() => viewRelative(0)}>
             ${n}
             <div class="approx">${formatRatio(detemper(n))}</div>
         </button>`)
@@ -130,6 +146,7 @@ function updateDiagnostics() {
 }
 
 renderScale();
+renderNonScale();
 updateDiagnostics();
 
 edoInput.addEventListener('change', () => {
@@ -145,6 +162,7 @@ edoInput.addEventListener('change', () => {
     edo = newEdo;
     stepScores = [...Array(edo).keys()].map(stepScore);
     renderScale();
+    renderNonScale();
 });
 
 prevModeButton.addEventListener('click', () => {
@@ -153,6 +171,7 @@ prevModeButton.addEventListener('click', () => {
         scaleIntervals = scaleIntervals.map(x => x + root);
         scaleIntervals.unshift(0);
         renderScale();
+        renderNonScale();
     }
 });
 
@@ -162,5 +181,6 @@ nextModeButton.addEventListener('click', () => {
         scaleIntervals = scaleIntervals.map(x => x - root);
         scaleIntervals.push(edo + scaleIntervals.shift()!);
         renderScale();
+        renderNonScale();
     }
 });
