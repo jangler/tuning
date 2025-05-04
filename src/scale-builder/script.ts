@@ -27,11 +27,12 @@ function ratios(limit: number): Ratio[] {
     return a;
 }
 
-const ratioPool = ratios(27);
+const limit = 27;
+const ratioPool = ratios(limit);
 let edo = edoInput.valueAsNumber;
 
-function tenneyHeight(r: Ratio): number {
-    return Math.log2(r[0] * r[1]);
+function height(r: Ratio): number {
+    return r[0] * r[1];
 }
 
 function bestMapping(r: Ratio, et: number): number {
@@ -50,16 +51,16 @@ function detemper(n: number): Ratio | null {
     }
     const matchedRatios = ratioPool
         .filter(r => bestMapping(r, edo) == n && approximates(n, edo, r));
-    matchedRatios.sort((a, b) => tenneyHeight(a) - tenneyHeight(b));
+    matchedRatios.sort((a, b) => height(a) - height(b));
     return matchedRatios[0]; // TODO
 }
 
 function stepScore(n: number): number {
     const r = detemper(n);
     if (r) {
-        return tenneyHeight(r);
+        return height(r);
     } else {
-        return 100;
+        return limit * limit;
     }
 }
 
@@ -73,10 +74,17 @@ function simplify(r: Ratio): Ratio {
     return [r[0] / f, r[1] / f];
 }
 
+let relative = 0;
+
+function viewRelative(n: number) {
+    relative = n;
+    renderScale();
+}
+
 function addInterval(n: number) {
     scaleIntervals.push(n);
     scaleIntervals.sort((a, b) => a - b);
-    renderScale();
+    viewRelative(0);
     renderNonScale();
     updateDiagnostics();
 }
@@ -84,7 +92,7 @@ function addInterval(n: number) {
 function removeInterval(n: number) {
     if (n == 0) return;
     scaleIntervals = scaleIntervals.filter(x => x != n);
-    renderScale();
+    viewRelative(0);
     renderNonScale();
     updateDiagnostics();
 }
@@ -94,7 +102,7 @@ function mean(xs: number[]): number {
 }
 
 function complexity(n: number, scale: number[]): number {
-    const result = mean(scale.map(x => Math.pow(stepScores[Math.abs(n - x)], 2)));
+    const result = mean(scale.map(x => stepScores[Math.abs(n - x)], 2));
     return result;
 }
 
@@ -104,13 +112,6 @@ function formatRatio(r: Ratio | null): string {
     } else {
         return '?';
     }
-}
-
-let relative = 0;
-
-function viewRelative(n: number) {
-    relative = n;
-    renderScale();
 }
 
 function renderScale() {
