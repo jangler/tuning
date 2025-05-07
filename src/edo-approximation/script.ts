@@ -22,8 +22,8 @@ function range(start: number, end: number): number[] {
     return [...Array(end - start).keys()].map(x => x + start);
 }
 
-function mean(xs: number[]): number {
-    return xs.reduce((sum, a) => sum + a, 0) / xs.length;
+function rms(xs: number[]): number {
+    return Math.sqrt(xs.reduce((sum, a) => sum + a*a, 0) / xs.length);
 }
 
 function edoSteps(edo: number, c: number): number {
@@ -37,7 +37,7 @@ function edoError(edo: number, c: number): number {
 function getResults(intervals: number[]): any[][] {
     const compareIndex = parseInt(sortedByInput.value);
     return range(5, edoLimitInput.valueAsNumber + 1).map(edo => {
-        const error = mean(intervals.map(c => Math.abs(edoError(edo, c))));
+        const error = rms(intervals.map(c => Math.abs(edoError(edo, c))));
         const steps = intervals.map(c => edoSteps(edo, c));
         return [edo, steps.join(', '), error, error / (1200 / edo)];
     }).sort((a, b) => Math.abs(a[compareIndex] as number) - Math.abs(b[compareIndex] as number))
